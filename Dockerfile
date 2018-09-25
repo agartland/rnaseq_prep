@@ -6,7 +6,7 @@ FROM ubuntu:18.04
 LABEL maintainer="agartlan@fredhutch.org"
 
 ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
-    ca-certificates zlib1g-dev curl unzip autoconf trimmomatic openjdk-7-jre-headless \
+    ca-certificates zlib1g-dev curl unzip autoconf trimmomatic default-jre \
     ed less locales vim-tiny nano wget fonts-texgyre python3.6 python-pip python-dev build-essential
 
 ENV SALMON_VERSION 0.11.3
