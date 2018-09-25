@@ -59,6 +59,10 @@ ENV R_BASE_VERSION 3.5.1
 ## Now install R and littler, and create a link for littler in /usr/local/bin
 ## Also set a default CRAN repo, and make sure littler knows about it too
 ## Also install stringr to make dococt install (from source) easier
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8B48AD6246925553
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+
 RUN apt-get update \
     && apt-get install -t unstable -y --no-install-recommends \
         littler \
