@@ -13,10 +13,6 @@ ENV SALMON_VERSION 0.11.3
 ENV R_BASE_VERSION 3.5.1
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8B48AD6246925553
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
-
 # salmon binary installed in /home/salmon/bin/salmon
 
 ### don't modify things below here for version updates etc.
@@ -37,6 +33,10 @@ RUN apt-get update && \
 ## Now install R and littler, and create a link for littler in /usr/local/bin
 ## Also set a default CRAN repo, and make sure littler knows about it too
 ## Also install stringr to make dococt install (from source) easier
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8B48AD6246925553
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+
 ## Use Debian unstable via pinning -- new style via APT::Default-Release
 RUN echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/debian-unstable.list \
         && echo 'APT::Default-Release "testing";' > /etc/apt/apt.conf.d/default 
