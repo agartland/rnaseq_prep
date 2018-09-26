@@ -7,8 +7,7 @@ LABEL maintainer="agartlan@fredhutch.org"
 
 ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
     ca-certificates zlib1g-dev curl unzip autoconf trimmomatic default-jre gnupg \
-    ed less locales vim-tiny nano wget fonts-texgyre python3.6 python-pip python-dev build-essential \
-    littler r-cran-littler r-cran-stringr r-base r-base-dev r-recommended
+    ed less locales vim-tiny nano wget fonts-texgyre python3.6 python-pip python-dev build-essential
 
 ENV SALMON_VERSION 0.11.3
 ENV R_BASE_VERSION 3.5.1
@@ -31,10 +30,6 @@ RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 
-## Use Debian unstable via pinning -- new style via APT::Default-Release
-#RUN echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/debian-unstable.list \
-#        && echo 'APT::Default-Release "testing";' > /etc/apt/apt.conf.d/default 
-
 RUN apt-get update && \
     apt-get install -t stable -y --no-install-recommends ${PACKAGES} && \
     apt-get clean
@@ -42,15 +37,17 @@ RUN apt-get update && \
 ## Now install R and littler, and create a link for littler in /usr/local/bin
 ## Also set a default CRAN repo, and make sure littler knows about it too
 ## Also install stringr to make dococt install (from source) easier
-## Installed R above with other packages
-#RUN apt-get update \
-#    && apt-get install -t unstable -y --no-install-recommends \
-#        littler \
-#        r-cran-littler \
-#        r-cran-stringr \
-#        r-base=${R_BASE_VERSION}-* \
-#        r-base-dev=${R_BASE_VERSION}-* \
-#        r-recommended=${R_BASE_VERSION}-*
+## Use Debian unstable via pinning -- new style via APT::Default-Release
+RUN echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/debian-unstable.list \
+        && echo 'APT::Default-Release "testing";' > /etc/apt/apt.conf.d/default 
+
+RUN apt-get install -t unstable -y --no-install-recommends \
+        littler \
+        r-cran-littler \
+        r-cran-stringr \
+        r-base=${R_BASE_VERSION}-* \
+        r-base-dev=${R_BASE_VERSION}-* \
+        r-recommended=${R_BASE_VERSION}-*
 RUN echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"))' >> /etc/R/Rprofile.site
 RUN echo 'source("/etc/R/Rprofile.site")' >> /etc/littler.r
 RUN ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r \
