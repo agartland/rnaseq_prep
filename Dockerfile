@@ -20,7 +20,7 @@ ENV DEBIAN_FRONTEND noninteractive
 WORKDIR /home
 
 RUN apt-get update && \
-    apt-get install -t stable -y --no-install-recommends ${PACKAGES} && \
+    apt-get install -y --no-install-recommends ${PACKAGES} && \
     apt-get clean
 
 ## Configure default locale, see https://github.com/rocker-org/rocker/issues/19
