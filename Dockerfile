@@ -42,7 +42,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
 RUN echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/debian-unstable.list \
         && echo 'APT::Default-Release "testing";' > /etc/apt/apt.conf.d/default 
 
-RUN apt-get install -t unstable -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         littler \
         r-cran-littler \
         r-cran-stringr \
