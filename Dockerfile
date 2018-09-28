@@ -1,6 +1,4 @@
 # image: afioregartland/rnaseq_prep
-# Dockerfile based on the combine-lab/salmon Dockerfile
-# available at https://github.com/COMBINE-lab/salmon/tree/master/docker
 FROM ubuntu:18.04
 # FROM amazonlinux:latest
 LABEL maintainer="agartlan@fredhutch.org"
@@ -12,10 +10,6 @@ ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
 ENV SALMON_VERSION 0.11.3
 ENV R_BASE_VERSION 3.5.1
 ENV DEBIAN_FRONTEND noninteractive
-
-# salmon binary installed in /home/salmon/bin/salmon
-
-### don't modify things below here for version updates etc.
 
 WORKDIR /home
 
