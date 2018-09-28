@@ -5,7 +5,7 @@ LABEL maintainer="agartlan@fredhutch.org"
 
 ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
     ca-certificates zlib1g-dev curl unzip autoconf trimmomatic default-jre gnupg \
-    ed less locales vim-tiny nano wget fonts-texgyre python3.6 python-pip python-dev build-essential
+    ed less locales vim-tiny nano wget fonts-texgyre python3.6 python3.6-dev build-essential
 
 ENV SALMON_VERSION 0.11.3
 ENV R_BASE_VERSION 3.5.1
@@ -16,6 +16,15 @@ WORKDIR /home
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ${PACKAGES} && \
     apt-get clean
+
+RUN wget https://bootstrap.pypa.io/get-pip.py \
+    && python3.6 get-pip.py
+RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3 \
+    && ln -s /usr/local/bin/pip /usr/local/bin/pip3
+
+RUN yes w | pip3 install --upgrade pip
+RUN yes w | pip3 install setuptools numpy
+RUN yes w | pip3 install pybedtools pysam biopython pandas scipy matplotlib scikit-bio jupyter
 
 ## Configure default locale, see https://github.com/rocker-org/rocker/issues/19
 ENV LC_ALL en_US.UTF-8
@@ -89,9 +98,5 @@ RUN chmod 755 /usr/local/bin/faToTwoBit
 
 RUN curl -o /usr/local/bin/twoBitToFa http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa
 RUN chmod 755 /usr/local/bin/twoBitToFa
-
-RUN yes w | pip install --upgrade pip
-RUN yes w | pip install setuptools numpy
-RUN yes w | pip install pybedtools pysam biopython pandas scipy matplotlib scikit-bio jupyter
 
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}
