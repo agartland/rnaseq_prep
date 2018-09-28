@@ -90,7 +90,7 @@ RUN chmod 755 /usr/local/bin/faToTwoBit
 RUN curl -o /usr/local/bin/twoBitToFa http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa
 RUN chmod 755 /usr/local/bin/twoBitToFa
 
-RUN pip install --upgrade pip
-RUN pip install pybedtools pysam biopython numpy pandas scipy matplotlib sckitbio jupyter
+RUN yes w | pip install --upgrade pip
+RUN yes w | pip install pybedtools pysam biopython numpy pandas scipy matplotlib sckitbio jupyter
 
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}
