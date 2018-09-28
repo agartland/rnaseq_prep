@@ -84,10 +84,10 @@ RUN curl -O https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.
     chmod 755 FastQC/fastqc && \
     ln -s /FastQC/fastqc /bin/fastqc
 
-RUN curl -o /usr/local/bin/faToTwoBit http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/faToTwoBit /usr/local/bin/faToTwoBit
+RUN curl -o /usr/local/bin/faToTwoBit http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/faToTwoBit
 RUN chmod 755 /usr/local/bin/faToTwoBit
 
-RUN curl -o /usr/local/bin/twoBitToFa http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa /usr/local/bin/twoBitToFa
+RUN curl -o /usr/local/bin/twoBitToFa http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa
 RUN chmod 755 /usr/local/bin/twoBitToFa
 
 RUN pip install --upgrade pip
