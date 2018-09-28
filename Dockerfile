@@ -37,7 +37,7 @@ RUN echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/
         && echo 'APT::Default-Release "testing";' > /etc/apt/apt.conf.d/default 
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+    apt-get install -t unstable -y --no-install-recommends \
         littler \
         r-cran-littler \
         r-cran-stringr \
