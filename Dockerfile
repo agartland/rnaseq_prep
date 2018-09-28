@@ -19,8 +19,7 @@ RUN apt-get update && \
 
 RUN wget https://bootstrap.pypa.io/get-pip.py \
     && python3.6 get-pip.py
-RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3 \
-    && ln -s /usr/local/bin/pip /usr/local/bin/pip3
+RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3
 
 RUN yes w | pip3 install --upgrade pip
 RUN yes w | pip3 install setuptools numpy
