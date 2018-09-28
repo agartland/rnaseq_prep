@@ -92,6 +92,6 @@ RUN chmod 755 /usr/local/bin/twoBitToFa
 
 RUN yes w | pip install --upgrade pip
 RUN yes w | pip install setuptools
-RUN yes w | pip install pybedtools pysam biopython numpy pandas scipy matplotlib sckitbio jupyter
+RUN yes w | pip install pybedtools pysam biopython numpy pandas scipy matplotlib scikit-bio jupyter
 
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}
