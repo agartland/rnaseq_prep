@@ -23,7 +23,7 @@ RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3
 
 RUN yes w | pip3 install --upgrade pip
 RUN yes w | pip3 install setuptools numpy
-RUN yes w | pip3 install pybedtools pysam biopython pandas scipy matplotlib scikit-bio jupyter
+RUN yes w | pip3 install pybedtools pysam biopython pandas scipy matplotlib scikit-bio jupyter feather-format awscli
 
 ## Configure default locale, see https://github.com/rocker-org/rocker/issues/19
 ENV LC_ALL en_US.UTF-8
@@ -63,7 +63,7 @@ RUN install.r docopt \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo 'local({r <- getOption("repos"); r["CRAN"] <- "http://cran.r-project.org"; options(repos=r)})' > ~/.Rprofile
-RUN R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("DESeq2"); biocLite("tximport"); biocLite("readr");'
+RUN R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("DESeq2"); biocLite("tximport"); biocLite("readr"); install.packages("feather", repos="http://cran.r-project.org");'
 
 # Install salmon from source
 RUN curl -k -L https://github.com/COMBINE-lab/salmon/archive/v${SALMON_VERSION}.tar.gz -o salmon-v${SALMON_VERSION}.tar.gz && \
@@ -98,4 +98,8 @@ RUN chmod 755 /usr/local/bin/faToTwoBit
 RUN curl -o /usr/local/bin/twoBitToFa http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa
 RUN chmod 755 /usr/local/bin/twoBitToFa
 
+RUN curl -k -L https://raw.githubusercontent.com/FredHutch/url-fetch-and-run/master/fetch-and-run/fetch_and_run.sh -o /usr/local/bin/fetch_and_run.sh
+
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin
+
+ENTRYPOINT ["/usr/local/bin/fetch_and_run.sh"]
