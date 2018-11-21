@@ -2,7 +2,7 @@
 
 """
 Usage examples:
-python /home/agartlan/gitrepo/rnaseq_prep/qc_salmon.py --r1 --r2
+python qc_salmon.py --r1 s3://afg-rnaseq-test/421400319V05BC019_S18_L001_R1_001.fastq.gz --r2 s3://afg-rnaseq-test/421400319V05BC019_S18_L001_R2_001.fastq.gz
 
 
 
@@ -51,9 +51,10 @@ import argparse
 import subprocess
 import re
 import boto3
+import botocore
 
 def parse_s3_url(url):
-    bucket, key = [s for s in re.match(r's3://(\w+)/(.+)', url).groups()]
+    bucket, key = [s for s in re.match(r's3://([-\w]+)/([-\w]+)', url).groups()]
     return bucket,key
 
 def grabfile(url, localfile):
