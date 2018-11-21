@@ -1,0 +1,28 @@
+quay.io/repository/afioregartland/rnaseq_prep
+
+{
+    "jobDefinitionName": "fetch_and_run",
+    "type": "container",
+    "containerProperties": {
+        "image": "quay.io/afioregartland/rnaseq_prep",
+        "vcpus": 2,
+        "memory": 2000,
+        "command": [
+            "qc_salmon.py",
+            "--r1 s3://afg-rnaseq-test/421400319V05BC019_S18_L001_R1_001.fastq.gz",
+            "--r2 s3://afg-rnaseq-test/421400319V05BC019_S18_L001_R2_001.fastq.gz"
+        ],
+        "jobRoleArn": "arn:aws:iam::243820856180:role/ec2-admin-role",
+        "environment": [
+            {
+                "name": "BATCH_FILE_URL",
+                "value": "https://raw.githubusercontent.com/agartland/rnaseq_prep/master/qc_salmon.py"
+            },
+            {
+                "name": "BATCH_FILE_TYPE",
+                "value": "script"
+            }
+        ],
+        "user": "nobody"
+    }
+}
