@@ -98,4 +98,4 @@ RUN chmod 755 /usr/local/bin/faToTwoBit
 RUN curl -o /usr/local/bin/twoBitToFa http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa
 RUN chmod 755 /usr/local/bin/twoBitToFa
 
-ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}
+ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin
