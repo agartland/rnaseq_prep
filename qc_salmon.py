@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Usage examples:
@@ -54,7 +54,7 @@ import boto3
 import botocore
 
 def parse_s3_url(url):
-    bucket, key = [s for s in re.match(r's3://([-\w]+)/([-\w]+)', url).groups()]
+    bucket, key = [s for s in re.match(r's3://([-\w]+)/([-\w\.]+)', url).groups()]
     return bucket,key
 
 def grabfile(url, localfile):
@@ -99,5 +99,6 @@ if __name__ == '__main__':
     outfile1 = runFASTQC(r1Fn)
     outfile2 = runFASTQC(r2Fn)
 
+    """WORKING HERE: THIS FILE NAME IS NOT CORRECT. DO I WANT THE WHOLE ZIP OR JUSTTHE HTML?"""
     putfile(args.r1 + '_fastqc.html', outfile1)
     putfile(args.r1 + '_fastqc.html', outfile2)
