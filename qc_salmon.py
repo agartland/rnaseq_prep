@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 """
+https://raw.githubusercontent.com/agartland/rnaseq_prep/master/qc_salmon.py
+
 Usage examples:
-python qc_salmon.py --r1 s3://afg-rnaseq-test/421400319V05BC019_S18_L001_R1_001.fastq.gz --r2 s3://afg-rnaseq-test/421400319V05BC019_S18_L001_R2_001.fastq.gz
+python3 qc_salmon.py --r1 s3://afg-rnaseq-test/421400319V05BC019_S18_L001_R1_001.fastq.gz --r2 s3://afg-rnaseq-test/421400319V05BC019_S18_L001_R2_001.fastq.gz
 
 
 
@@ -78,8 +80,8 @@ def runFASTQC(localfile):
             localfile,
             '--noextract',
             '-q']
-    subprocess.check_call(' '.join(cmd))
-    outfile = localfile + '_fastqc.html'
+    subprocess.check_call(' '.join(cmd), shell=True)
+    outfile = localfile.replace('.gz', '') + '_fastqc.html'
     return outfile
 
 if __name__ == '__main__':
@@ -99,6 +101,5 @@ if __name__ == '__main__':
     outfile1 = runFASTQC(r1Fn)
     outfile2 = runFASTQC(r2Fn)
 
-    """WORKING HERE: THIS FILE NAME IS NOT CORRECT. DO I WANT THE WHOLE ZIP OR JUSTTHE HTML?"""
     putfile(args.r1 + '_fastqc.html', outfile1)
     putfile(args.r1 + '_fastqc.html', outfile2)
