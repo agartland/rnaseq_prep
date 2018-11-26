@@ -54,6 +54,7 @@ import subprocess
 import re
 import boto3
 import botocore
+import sys
 
 def parse_s3_url(url):
     bucket, key = [s for s in re.match(r's3://([-\w]+)/([-\w\.]+)', url).groups()]
@@ -85,6 +86,7 @@ def runFASTQC(localfile):
     return outfile
 
 if __name__ == '__main__':
+    print(sys.argv)
     parser = argparse.ArgumentParser(description='Fetch PE reads from S3 for: QC, trimming, salmon mapping and gene-level quantification.')
     parser.add_argument('--r1', type=str,
                         help='Location of R1 reads file (S3 bucket or filesystem)')
