@@ -102,4 +102,6 @@ if __name__ == '__main__':
     outfile2 = runFASTQC(r2Fn)
 
     putfile(args.r1 + '_fastqc.html', outfile1)
-    putfile(args.r1 + '_fastqc.html', outfile2)
+    print('Uploaded %s to %s' % (args.r1 + '_fastqc.html', outfile1))
+    putfile(args.r2 + '_fastqc.html', outfile2)
+    print('Uploaded %s to %s' % (args.r2 + '_fastqc.html', outfile2))
