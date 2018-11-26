@@ -99,6 +99,7 @@ RUN curl -o /usr/local/bin/twoBitToFa http://hgdownload.cse.ucsc.edu/admin/exe/l
 RUN chmod 755 /usr/local/bin/twoBitToFa
 
 RUN curl -k -L https://raw.githubusercontent.com/FredHutch/url-fetch-and-run/master/fetch-and-run/fetch_and_run.sh -o /usr/local/bin/fetch_and_run.sh
+RUN chmod +x /usr/local/bin/fetch_and_run.sh
 
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin
 
