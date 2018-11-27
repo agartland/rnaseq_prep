@@ -23,7 +23,7 @@ RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3
 
 RUN yes w | pip3 install --upgrade pip
 RUN yes w | pip3 install setuptools numpy
-RUN yes w | pip3 install pybedtools pysam biopython pandas scipy matplotlib scikit-bio jupyter feather-format awscli boto3 botocore
+RUN yes w | pip3 install pybedtools pysam biopython pandas scipy matplotlib scikit-bio jupyter feather-format awscli boto3 botocore multiqc
 
 ## Configure default locale, see https://github.com/rocker-org/rocker/issues/19
 ENV LC_ALL en_US.UTF-8
