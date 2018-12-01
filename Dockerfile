@@ -63,7 +63,7 @@ RUN install.r docopt \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo 'local({r <- getOption("repos"); r["CRAN"] <- "http://cran.r-project.org"; options(repos=r)})' > ~/.Rprofile
-RUN R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("DESeq2"); biocLite("tximport"); biocLite("readr"); install.packages("feather", repos="http://cran.r-project.org");'
+RUN R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("DESeq2"); biocLite("tximport"); biocLite("TxDb.Hsapiens.UCSC.hg38.knownGene"); biocLite("readr"); install.packages("feather", repos="http://cran.r-project.org");'
 
 # Install salmon from source
 RUN curl -k -L https://github.com/COMBINE-lab/salmon/archive/v${SALMON_VERSION}.tar.gz -o salmon-v${SALMON_VERSION}.tar.gz && \
