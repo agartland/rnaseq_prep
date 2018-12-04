@@ -1,5 +1,6 @@
 #!/usr/bin/env nextflow
 
+// nextflow test.nf -w s3://fh-pi-gilbert-p/agartlan/rnaseq_working
 //params.output = 's3://fh-pi-gilbert-p/agartlan/rnaseq-test/'
 //params.input = 's3://fh-pi-gilbert-p/agartlan/rnaseq-test/*.fastq.gz'
 
@@ -16,6 +17,7 @@ Channel.fromFilePairs(params.input).into{infiles1_ch; infiles2_ch}
 //println myFile.text
 
 process pre_fastqc {
+    container = 'quay.io/afioregartland/rnaseq_prep'
     
     tag "Pre-FASTQC of $seqid on $infiles"
 
@@ -33,6 +35,7 @@ process pre_fastqc {
 }
 
 process trim {
+    container = 'quay.io/afioregartland/rnaseq_prep'
     
     tag "trimmomatic on $seqid"
 
@@ -42,7 +45,9 @@ process trim {
 
     output:
     file("trimmomatic_output/${seqid}.log") into trimmomatic_logs_ch
-    set file("filtered_P1_${seqid}.fastq.gz"), file("filtered_P2_${seqid}.fastq.gz") into trimmed_ch
+    // set file("filtered_P1_${seqid}.fastq.gz"), file("filtered_P2_${seqid}.fastq.gz") into trimmed_ch
+    set file("filtered_P1_${seqid}.fastq.gz") into trimmed1_ch
+    set file("filtered_P2_${seqid}.fastq.gz") into trimmed2_ch
 
     script: 
     """
@@ -56,12 +61,21 @@ process trim {
     """
 }
 
-trimmed_ch.into{trimmed_fastqc_ch; trimmed_squant_ch}
+/*trimmed_ch.into{trimmed_fastqc_ch; trimmed_squant_ch}
+trimmed_squant_ch.collect().into{collected_trimmed_squant_ch}*/
+
+trimmed1_ch.into{trimmed1_fastqc_ch; trimmed1_squant_ch}
+trimmed2_ch.into{trimmed2_fastqc_ch; trimmed2_squant_ch}
+trimmed1_fastqc_ch.mix(trimmed2_fastqc_ch).into{trimmed_fastqc_ch}
+trimmed1_squant_ch.collect().into{collected1_trimmed_squant_ch}
+trimmed2_squant_ch.collect().into{collected2_trimmed_squant_ch}
+
 //tmp1_ch.merge(tmp2_ch).into{trimmed_fastqc_ch; trimmed_squant_ch}
 //tmp1.into{trimmomatic_P1_filtered_ch; trimmed_P1_ch}
 //tmp2.into{trimmomatic_P2_filtered_ch; trimmed_P2_ch}
 
 process post_fastqc {
+    container = 'quay.io/afioregartland/rnaseq_prep'
     
     tag "Post-FASTQC on $forfile and $revfile"
 
@@ -82,26 +96,32 @@ process post_fastqc {
 }
 
 process salmon_quant {
+    container = 'quay.io/afioregartland/rnaseq_prep'
+
     publishDir params.output, mode:'copy'
     
-    tag "salmon on $trimmed1 and $trimmed2"
+    //tag "salmon on $trimmed11, $trimmed21, $trimmed12, $trimmed22"
+    tag "salmon $trimmed1 and $trimmed2"
     
     input:
     file index from index_ch
-    set file(trimmed1), file(trimmed2) from trimmed_squant_ch
+    //set file(trimmed11), file(trimmed21), file(trimmed12), file(trimmed22) from collected_trimmed_squant_ch
+    set file(trimmed1) from collected1_trimmed_squant_ch
+    set file(trimmed2) from collected2_trimmed_squant_ch
  
     output:
-    file("squant_${trimmed1}_${trimmed2}")
+    file("squant_all")
 
     script:
     """
     salmon quant --threads $task.cpus --gcBias\
-            -i $index -l A -1 ${trimmed1} -2 ${trimmed2} \
-            -o squant_${trimmed1}_${trimmed2}
+            -i $index -l A -1 ${trimmed1} -2 ${trimmed2}\
+            -o squant_all
     """
 }
 
 process multiqc {
+    container = 'quay.io/afioregartland/rnaseq_prep'
     publishDir params.output, mode:'copy'
        
     input:

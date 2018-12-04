@@ -103,4 +103,4 @@ RUN chmod +x /usr/local/bin/fetch_and_run.sh
 
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin
 
-ENTRYPOINT ["/usr/local/bin/fetch_and_run.sh"]
+# ENTRYPOINT ["/usr/local/bin/fetch_and_run.sh"]
