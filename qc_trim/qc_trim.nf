@@ -3,56 +3,23 @@
 // nextflow qc_trim.nf -profile awscloud -w s3://fh-pi-gilbert-p/agartlan/rnaseq_working
 // nextflow qc_trim.nf -profile local --max_samples 1
 
-//params.output = 's3://fh-pi-gilbert-p/agartlan/rnaseq-test/'
-//params.input = 's3://fh-pi-gilbert-p/agartlan/rnaseq-test/9*_R{1,2}_001.fastq.gz'
-
-/*params.input = '/home/agartlan/fast/LamarAndrew/RawFASTQexamples/9*_R{1,2}_001.fastq.gz'
-params.output = '.'
-params.index = '/home/agartlan/fast/LamarAndrew/UCSC_h38/h38_refMrna_index'*/
-
 params.url = 's3://fh-pi-gilbert-p/agartlan/HVTN602-RNA'
 params.max_samples = -1
 
-/*params.parser = 's3://fh-pi-gilbert-p/agartlan/HVTN602-RNA/parse_keys.py'
-// params.parser = 'parse_keys.py'
-
-Channel.fromPath(params.parser).set{ parser_ch }
-//Channel.fromFilePairs(params.input, flat:true).into{infiles1_ch; infiles2_ch}
-
-process parse_bucket {
-    executor 'local'
-
-    label 'singlecore'
-
-    tag "Parsing with $parser ($params.url)"
-
-    input:
-    file parser from parser_ch
-
-    output:
-    //stdout into parsed_csv_ch
-    file(csv_out) into parsed_csv_ch
-
-    script:
-    """
-    python $parser $params.url > csv_out
-    """
-}
-*/
 Channel.fromPath("$params.url" + '/qc_keys.csv')
         .splitCsv(header: true)
         .take(params.max_samples)
         .set { infiles_ch }
 
-// tmp.subscribe { println "value: $it" }
-
 process qc_and_trim {
 
     publishDir path:"$prefix", mode:'copy', pattern:'*.fastq.gz'
 
+    time '1h'
+
     label 'multicore'
     
-    tag "QC trim of $seqid on $forfile and $revfile"
+    tag "QC trim of $seqid"
 
     input:
     set seqid, prefix, forfile, revfile from infiles_ch
@@ -71,8 +38,8 @@ process qc_and_trim {
 
     script: 
     """
-    aws s3 cp "$forfile" ./${seqid}_R1.fastq.gz &
-    aws s3 cp "$revfile" ./${seqid}_R2.fastq.gz &
+    aws s3 cp "$forfile" ./${seqid}_R1.fastq.gz --quiet &
+    aws s3 cp "$revfile" ./${seqid}_R2.fastq.gz --quiet &
     wait
 
     mkdir pre_fastqc_${seqid}_R1_logs
