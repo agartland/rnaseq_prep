@@ -101,6 +101,17 @@ RUN chmod 755 /usr/local/bin/twoBitToFa
 RUN curl -k -L https://raw.githubusercontent.com/FredHutch/url-fetch-and-run/master/fetch-and-run/fetch_and_run.sh -o /usr/local/bin/fetch_and_run.sh
 RUN chmod +x /usr/local/bin/fetch_and_run.sh
 
-ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin
+# Configure version and source
+ENV STAR_VERSION STAR_2.6.0a
+ENV STAR_RELEASE_URL https://github.com/alexdobin/STAR/archive/
+ENV STAR_DIR /usr/local/bin/star
+
+# Make destination directory
+RUN mkdir -p $STAR_DIR
+
+# Download & extract archive - Repo includes binaries for linux
+RUN curl -SL ${STAR_RELEASE_URL}${STAR_VERSION}.tar.gz | tar -xzC $STAR_DIR
+
+ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin:$STAR_DIR/STAR-${STAR_VERSION}/bin/Linux_x86_64/
 
 # ENTRYPOINT ["/usr/local/bin/fetch_and_run.sh"]
