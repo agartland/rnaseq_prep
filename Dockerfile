@@ -8,7 +8,7 @@ ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
     ed less locales vim-tiny nano wget fonts-texgyre python3.6 python3.6-dev build-essential
 
 ENV SALMON_VERSION 0.11.3
-ENV R_BASE_VERSION 3.5.1
+ENV R_BASE_VERSION 3.5.2
 ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /home
