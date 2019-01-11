@@ -8,7 +8,7 @@ ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
     ed less locales vim-tiny nano wget fonts-texgyre python3.6 python3.6-dev build-essential
 
 ENV SALMON_VERSION 0.11.3
-ENV R_BASE_VERSION 3.5.1
+ENV R_BASE_VERSION 3.5.2
 ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /home
@@ -23,7 +23,8 @@ RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3
 
 RUN yes w | pip3 install --upgrade pip
 RUN yes w | pip3 install setuptools numpy
-RUN yes w | pip3 install pybedtools pysam biopython pandas scipy matplotlib scikit-bio jupyter feather-format awscli boto3 botocore multiqc
+RUN yes w | pip3 install 'matplotlib<3.0.0,>=2.1.1'
+RUN yes w | pip3 install pybedtools pysam biopython pandas scipy scikit-bio jupyter feather-format awscli boto3 botocore multiqc
 
 ## Configure default locale, see https://github.com/rocker-org/rocker/issues/19
 ENV LC_ALL en_US.UTF-8
@@ -101,17 +102,9 @@ RUN chmod 755 /usr/local/bin/twoBitToFa
 RUN curl -k -L https://raw.githubusercontent.com/FredHutch/url-fetch-and-run/master/fetch-and-run/fetch_and_run.sh -o /usr/local/bin/fetch_and_run.sh
 RUN chmod +x /usr/local/bin/fetch_and_run.sh
 
-# Configure version and source
-ENV STAR_VERSION STAR_2.6.0a
-ENV STAR_RELEASE_URL https://github.com/alexdobin/STAR/archive/
-ENV STAR_DIR /usr/local/bin/star
+# Download & extract STAR - Repo includes binaries for linux
+RUN curl -sSL https://github.com/alexdobin/STAR/blob/master/bin/Linux_x86_64_static/STAR?raw=true -o /usr/local/bin/star
 
-# Make destination directory
-RUN mkdir -p $STAR_DIR
-
-# Download & extract archive - Repo includes binaries for linux
-RUN curl -SL ${STAR_RELEASE_URL}${STAR_VERSION}.tar.gz | tar -xzC $STAR_DIR
-
-ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin:$STAR_DIR/STAR-${STAR_VERSION}/bin/Linux_x86_64/
+ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin
 
 # ENTRYPOINT ["/usr/local/bin/fetch_and_run.sh"]
