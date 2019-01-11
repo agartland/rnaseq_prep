@@ -4,8 +4,13 @@
 // nextflow salmon.nf -profile local --max_libs 1
 
 // params.transcriptome = 's3://fh-pi-gilbert-p/agartlan/hg38/refMrna_reduced.fa.gz'
-params.transcriptome = 's3://fh-pi-gilbert-p/agartlan/hg38/refMrna.fa.gz'
-params.url = 's3://fh-pi-gilbert-p/agartlan/HVTN602-RNA'
+// params.transcriptome = 's3://fh-pi-gilbert-p/agartlan/hg38/refMrna.fa.gz'
+// params.transcriptome = 's3://fh-pi-gilbert-p/agartlan/Ensembl_hg38/Homo_sapiens.GRCh38.cdna.all.fa.gz'
+// params.transcriptome = 's3://fh-pi-gilbert-p/agartlan/Ensembl_hg38/Homo_sapiens.GRCh38.ncrna.fa.gz'
+params.transcriptome = 's3://fh-pi-gilbert-p/agartlan/Ensembl_hg38/cdna.all_ncrna.fa.gz'
+
+// params.url = 's3://fh-pi-gilbert-p/agartlan/HVTN602-RNA'
+params.url = 's3://fh-pi-gilbert-p/agartlan/TBVPX203-RNA'
 params.max_libs = -1
 
 Channel.fromPath("$params.url" + '/quant_keys.csv')
@@ -45,25 +50,27 @@ process salmon_quant {
     set sampid, prefix from infiles_ch
  
     output:
-    file("squant_filtered_${sampid}_logs") into quant_folder_ch
+    file("squant_${sampid}_logs") into quant_folder_ch
+    file("squant_${sampid}")
 
     script:
     """
-    aws s3 cp "${prefix}/" ./ --recursive --exclude "*" --include "filtered*.fastq.gz" --quiet
+    # aws s3 cp "${prefix}/" ./ --recursive --exclude "*" --include "filtered*.fastq.gz" --quiet
+    aws s3 cp "${prefix}/" ./ --recursive --exclude "*" --include "*.fastq.gz" --quiet
 
     # zcat \$(ls filtered_P1_*.fastq.gz) | head -n 1000 | gzip > red_filtered_P1_red.fastq.gz
     # zcat \$(ls filtered_P2_*.fastq.gz) | head -n 1000 | gzip > red_filtered_P2_red.fastq.gz
 
     salmon quant --threads $task.cpus --gcBias\
             -i $index -l A \
-            -1 \$(ls filtered_P1_*.fastq.gz) \
-            -2 \$(ls filtered_P2_*.fastq.gz) \
-            -o squant_filtered_${sampid}
+            -1 \$(ls *_R1_*.fastq.gz) \
+            -2 \$(ls *_R2_*.fastq.gz) \
+            -o squant_${sampid}
 
     mkdir tmp_${sampid}
-    mv squant_filtered_${sampid}/quant.sf tmp_${sampid}/quant.sf
-    cp -r squant_filtered_${sampid} squant_filtered_${sampid}_logs
-    mv tmp_${sampid}/quant.sf squant_filtered_${sampid}/quant.sf
+    mv squant_${sampid}/quant.sf tmp_${sampid}/quant.sf
+    cp -r squant_${sampid} squant_${sampid}_logs
+    mv tmp_${sampid}/quant.sf squant_${sampid}/quant.sf
     rm -r tmp_${sampid}
     """
 }

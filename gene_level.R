@@ -6,5 +6,7 @@ k <- keys(txdb, keytype = "TXNAME")
 tx2gene <- select(txdb, k, "GENEID", "TXNAME")
 
 library(tximport)
+library(readr)
+tx2gene <- read_csv(file.path("/home/agartlan/fast/LamarAndrew/UCSC_h38", "refseq2gene.csv"))
 txi <- tximport(c(filename), type = "salmon", tx2gene = tx2gene)
 
