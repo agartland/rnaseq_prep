@@ -104,6 +104,7 @@ RUN chmod +x /usr/local/bin/fetch_and_run.sh
 
 # Download & extract STAR - Repo includes binaries for linux
 RUN curl -sSL https://github.com/alexdobin/STAR/blob/master/bin/Linux_x86_64_static/STAR?raw=true -o /usr/local/bin/star
+RUN chmod +x /usr/local/bin/star
 
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin
 
