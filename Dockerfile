@@ -5,7 +5,8 @@ LABEL maintainer="agartlan@fredhutch.org"
 
 ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
     ca-certificates zlib1g-dev curl unzip autoconf trimmomatic default-jre gnupg \
-    ed less locales vim-tiny nano wget fonts-texgyre python3.6 python3.6-dev build-essential
+    ed less locales vim-tiny nano wget fonts-texgyre python3.6 python3.6-dev build-essential \
+    openjdk-7-jdk openjdk-8-jdk wget
 
 ENV SALMON_VERSION 0.11.3
 ENV R_BASE_VERSION 3.5.2
@@ -106,6 +107,14 @@ RUN chmod +x /usr/local/bin/fetch_and_run.sh
 RUN curl -sSL https://github.com/alexdobin/STAR/blob/master/bin/Linux_x86_64_static/STAR?raw=true -o /usr/local/bin/star
 RUN chmod +x /usr/local/bin/star
 
-ENV PATH /home/salmon-${SALMON_VERSION}/bin:${PATH}:/usr/bin
+# RNA-seQC
+RUN curl -sSL https://github.com/broadinstitute/rnaseqc/releases/download/v2.1.0/rnaseqc.v2.1.0.linux.gz -o /usr/local/bin/rnaseqc
+RUN chmod +x /usr/local/bin/rnaseqc
+
+# Picard tools
+RUN mkdir /home/picard-tools && \
+    wget --no-check-certificate -P /home/picard-tools/ https://github.com/broadinstitute/picard/releases/download/2.9.0/picard.jar
+
+ENV PATH /home/salmon-${SALMON_VERSION}/bin:/home/picard-tools:/usr/bin
 
 # ENTRYPOINT ["/usr/local/bin/fetch_and_run.sh"]
