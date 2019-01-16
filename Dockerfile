@@ -114,6 +114,15 @@ RUN chmod +x /usr/local/bin/rnaseqc
 # Picard tools
 RUN mkdir /home/picard-tools && \
     wget --no-check-certificate -P /home/picard-tools/ https://github.com/broadinstitute/picard/releases/download/2.9.0/picard.jar
+    
+# SAM tools
+RUN mkdir ~/src && \
+    cd ~/src && \
+    git clone https://github.com/samtools/htslib && \
+    git clone https://github.com/samtools/samtools && \
+    cd samtools && \
+    make && \
+    cp samtools /usr/bin
 
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:/home/picard-tools:/usr/bin
 
