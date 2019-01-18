@@ -126,4 +126,5 @@ RUN mkdir ~/src && \
 
 ENV PATH /home/salmon-${SALMON_VERSION}/bin:/home/picard-tools:/usr/bin
 
-# ENTRYPOINT ["/usr/local/bin/fetch_and_run.sh"]
+RUN cd /home
+ENTRYPOINT ["/bin/bash"]
