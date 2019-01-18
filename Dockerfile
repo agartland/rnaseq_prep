@@ -124,7 +124,7 @@ RUN mkdir ~/src && \
     make && \
     cp samtools /usr/bin
 
-ENV PATH /home/salmon-${SALMON_VERSION}/bin:/home/picard-tools:/usr/bin
+ENV PATH /home/salmon-${SALMON_VERSION}/bin:/home/picard-tools:/usr/bin:$PATH
 
 RUN cd /home
-ENTRYPOINT ["/bin/bash"]
+# ENTRYPOINT ["/bin/bash"]
