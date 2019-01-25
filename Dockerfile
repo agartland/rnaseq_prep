@@ -6,7 +6,7 @@ LABEL maintainer="agartlan@fredhutch.org"
 ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
     ca-certificates zlib1g-dev curl unzip autoconf trimmomatic default-jre gnupg \
     ed less locales vim-tiny nano wget fonts-texgyre python3.6 python3.6-dev build-essential \
-    openjdk-8-jdk wget
+    openjdk-8-jdk wget screen
 
 ENV SALMON_VERSION 0.11.3
 ENV R_BASE_VERSION 3.5.2
