@@ -3,6 +3,7 @@ FROM ubuntu:18.04
 # FROM amazonlinux:latest
 LABEL maintainer="agartlan@fredhutch.org"
 
+
 ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
     ca-certificates zlib1g-dev curl unzip autoconf trimmomatic default-jre gnupg \
     ed less locales vim-tiny nano wget fonts-texgyre python3.6 python3.6-dev build-essential \
