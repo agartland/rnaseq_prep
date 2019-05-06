@@ -3,14 +3,13 @@ FROM ubuntu:18.04
 # FROM amazonlinux:latest
 LABEL maintainer="agartlan@fredhutch.org"
 
-
 ENV PACKAGES git gcc make g++ cmake libboost-all-dev liblzma-dev libbz2-dev \
     ca-certificates zlib1g-dev curl unzip autoconf trimmomatic default-jre gnupg \
     ed less locales vim-tiny nano wget fonts-texgyre python3.6 python3.6-dev build-essential \
     openjdk-8-jdk wget screen
 
-ENV SALMON_VERSION 0.11.3
-ENV R_BASE_VERSION 3.5.2
+ENV SALMON_VERSION 0.13.1
+ENV R_BASE_VERSION 3.6.0
 ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /home
@@ -89,9 +88,9 @@ RUN curl -k -L https://github.com/COMBINE-lab/salmon/archive/v${SALMON_VERSION}.
 #    cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local && make && make install
 
 # Install fastqc
-RUN curl -O https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.7.zip && \
-    unzip fastqc_v0.11.7.zip && \
-    rm fastqc_v0.11.7.zip && \
+RUN curl -O https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.8.zip && \
+    unzip fastqc_v0.11.8.zip && \
+    rm fastqc_v0.11.8.zip && \
     chmod 755 FastQC/fastqc && \
     ln -s /home/FastQC/fastqc /bin/fastqc
 
@@ -114,7 +113,7 @@ RUN chmod +x /usr/local/bin/rnaseqc
 
 # Picard tools
 RUN mkdir /home/picard-tools && \
-    wget --no-check-certificate -P /home/picard-tools/ https://github.com/broadinstitute/picard/releases/download/2.9.0/picard.jar
+    wget --no-check-certificate -P /home/picard-tools/ https://github.com/broadinstitute/picard/releases/download/2.20.0/picard.jar
     
 # SAM tools
 RUN mkdir ~/src && \
